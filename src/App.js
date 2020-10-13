@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const App = () => {
+  const [ userNames, setUserNames ] = useState([])
   // 20% of the users are online, 80% offline on average.
   // Takes 4-8 secs to complete
   const checkStatus = async (userId) => {
-    return Math.random() > 0.2
+    return Math.random() > 0.8
       ? { status: "offline", id: userId }
       : { status: "online", id: userId };
   };
@@ -32,6 +33,26 @@ const App = () => {
       return the users for which the introductions were successfully sent
   */
 
+  useEffect(()=>{
+    const userList = []
+    async  function fetchUsers(){
+      const userIds = await fetchUserIds()
+      if (userIds){
+        userIds.map(async(userid, index)=>{
+          const data =  await checkStatus(userid)
+          if(data.status == 'online'){
+            const intro = await sendIntroduction(userid)
+            if(intro){
+              userList.push(data.id)
+            }
+          }
+          setUserNames(userList)
+        })
+      } 
+    }
+    
+    fetchUsers()
+  },[])
   /*
   Question 2:
     - Re-try for each user if they are offline or if sendIntroduction is false
@@ -51,11 +72,15 @@ const App = () => {
       <div className="App-header">
         <div>
           All online users that introductions were sucessfully sent
-          <ul>
-            <li>Student 1</li>
-            <li>Student 2</li>
-            <li>Student 3</li>
-          </ul>
+          {
+            userNames.map((name, id)=>{
+              return(
+                <ul key={id}>
+                <li>{name}</li>
+              </ul>
+              )
+            })
+          }        
         </div>
       </div>
     </div>
