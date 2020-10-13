@@ -24,15 +24,6 @@ const App = () => {
     return Math.random() > 0.1 ? true : false;
   };
 
-  async function checkStatusAndSendIntroductions() {
-
-  }
-
-  checkStatusAndSendIntroductions()
-    .then((userIds) => console.log("sent introductions to: ", userIds))
-    .catch((ex) => {
-      console.error("got back  error", ex);
-    });
   // sent introductions to: [john.smith, sara.lee, ...]
   // sent introductions to: [Promise, Promise, ...]
 
@@ -54,8 +45,6 @@ const App = () => {
   - 90% of the introductions are successfully sent in a 2 second window
   - 5000 users in total
   */
-
-
 
   return (
     <div className="App">
