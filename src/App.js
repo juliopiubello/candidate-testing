@@ -43,7 +43,7 @@ const App = () => {
        * const sendIntroduction = async (userId) => {
 		      return Math.random() > 0.1 ? true : false;
         };
-        because this function accepts userId as an argument but this argument was not used in the function body i has no impact 
+        because this function accepts userId as an argument but this argument was not used in the function body so it has no impact 
 			 */
 			// const sent = sendIntroduction(id);
 			// if (sent) {
