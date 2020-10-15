@@ -24,8 +24,9 @@ const App = () => {
 	};
 
 	const [online, setUsers] = useState([]);
-	const onlineUsers = [];
+
 	const getUsers = async () => {
+		const onlineUsers = [];
 		const usersids = fetchUserIds();
 		usersids.map((id) => {
 			const status = checkStatus(id);
@@ -37,7 +38,7 @@ const App = () => {
 				console.log(`sent introductions to ${id}`);
 				onlineUsers.push(id);
 			}
-
+			setUsers(onlineUsers);
 			/**
 			 * Notes i don't know whether  this was intentional or mistake on 
        * const sendIntroduction = async (userId) => {
@@ -53,9 +54,9 @@ const App = () => {
 			// }
 			// Short hand way
 			//  sent? console.log(`sent introductions to ${id}`): console.log(`Introduction was not sent t ${id}`)
-			setUsers(onlineUsers);
 		});
 	};
+
 	useEffect(() => {
 		getUsers();
 
@@ -63,8 +64,12 @@ const App = () => {
 		// return () => {
 		//   cleanup
 		// }
-	}, []);
+	}, [online]);
 
+	/**
+	 * Call getUsers function after every second to get uptodate online users and the component will rerender if array of onnline users change
+	 */
+	setInterval(() => getUsers, 1000);
 	// sent introductions to: [john.smith, sara.lee, ...]
 	// sent introductions to: [Promise, Promise, ...]
 
