@@ -38,7 +38,7 @@ const App = () => {
 				console.log(`sent introductions to ${id}`);
 				onlineUsers.push(id);
 			}
-			setUsers(onlineUsers);
+
 			/**
 			 * Notes i don't know whether  this was intentional or mistake on 
        * const sendIntroduction = async (userId) => {
@@ -55,6 +55,7 @@ const App = () => {
 			// Short hand way
 			//  sent? console.log(`sent introductions to ${id}`): console.log(`Introduction was not sent t ${id}`)
 		});
+		setUsers(onlineUsers);
 	};
 
 	useEffect(() => {
