@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+.students{
+  display: block;
+}
+
+button{
+  background-color: skyblue;
+  color:white;
+  padding: 10px;
+}
