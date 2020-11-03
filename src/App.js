@@ -28,24 +28,18 @@ const App = () => {
       let users = await fetchUserIds();
 
       // map through the array of user
-      users.map((user, index) => {
+      users.map(async (user, index) => {
         // check users' status using their id
-        async function getStatus() {
-          let status = await checkStatus(index);
-          // if user is online, send them an introduction
-          if (status.status === "online") {
-            async function sendIntro() {
-              let intro = await sendIntroduction(status.id);
-              // check if sendIntroduction delivered succefully
-              if (intro) {
-                // save succeful user on the state
-                setUserWithIntroSuccess((current) => [...current, user]);
-              }
-            }
-            sendIntro();
+        let status = await checkStatus(index);
+        // if user is online, send them an introduction
+        if (status.status === "online") {
+          let intro = await sendIntroduction(status.id);
+          // check if sendIntroduction delivered succefully
+          if (intro) {
+            // save succeful user on the state
+            setUserWithIntroSuccess((current) => [...current, user]);
           }
         }
-        getStatus();
       });
     }
     returnUSerID();
