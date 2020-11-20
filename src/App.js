@@ -16,8 +16,40 @@ const App = () => {
     return Math.random() > 0.1 ? true : false;
   };
 
+
+  const [success, setSuccess] = useState([]);
+
+  async function runAll(){
+    let users = await fetchUserIds(),
+    succ = [];
+
+    await users.forEach( (user, index)=>{
+      checkStatus(index).then(
+          res=>{
+            if(res.status === "online"){
+              sendIntroduction(index).then(res=>{
+                if(res === true){
+                  succ.push(user);
+                }
+              })
+            }
+          }
+      )
+    });
+
+    return succ;
+  }
+
+  useEffect(()=>{
+    runAll().then(res=>{
+      setSuccess(res)
+    });
+  }, [])
+
+
+
   /*
-    Question 1: Find all online users and send them introductions. 
+    Question 1: Find all online users and send them introductions.
       return the users for which the introductions were successfully sent
   */
 
@@ -26,11 +58,15 @@ const App = () => {
       <div className="App-header">
         <div>
           All online users that introductions were sucessfully sent
+
           <ul>
+            {success.map((item, index)=> <li key={index}>{item}</li>)}
+          </ul>
+          {/*<ul>
             <li>Student 1</li>
             <li>Student 2</li>
             <li>Student 3</li>
-          </ul>
+          </ul>*/}
         </div>
       </div>
     </div>
