@@ -32,20 +32,22 @@ const App = () => {
  useEffect(()=> {
    const initIntroPage = async () => {
     const users = await fetchUserIds();
-    
     const onlineUsers = [];
+    const usersIntroduced = [];
+
     for (const user of users) {
       const { status } = await checkStatus(user);
         if(status === "online") onlineUsers.push(user);
     }
-    const usersIntroduced = [];
+
      for (const user of onlineUsers) {
       const isIntroduced = await sendIntroduction(user);
         if(isIntroduced) usersIntroduced.push(user);
     }
+    
      setUsersToRender(usersIntroduced);
    }
-   initIntroPage();
+   initIntroPage().catch(err => console.error(err));
  }, []);
 
   return (
