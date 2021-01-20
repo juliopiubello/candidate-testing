@@ -27,18 +27,53 @@ const App = () => {
     Step 4: Render those which the intro was sucessfully sentt
   
   */
+ const checkStatusAndSendIntroductionToUsers = async () => {
+   const usersIds = await fetchUserIds();
+   let successfulUser = [];
+   let onlineUsers = [];
+
+   for(let userId of usersIds){
+     let status = await checkStatus(userId);
+     if (status.status === 'online'){
+      onlineUsers.push(userId);
+     }
+   }
+
+   for(let userId of onlineUsers){ 
+      const isIntroSent = await sendIntroduction(userId);
+      if(isIntroSent){
+        successfulUser.push(userId);
+      }
+   }
+
+  //  console.log({successfulUser});
+  setUserNames(successfulUser);
+ }
+
+ const [userNames, setUserNames] = useState([]);
+ const [isHidden, setIsHidden] = useState(false);
+
+ useEffect(()=> {
+  checkStatusAndSendIntroductionToUsers().catch(err => console.error(err));
+ }, [])
+
+ const showOrHide = () => {
+   setIsHidden(isHidden => !isHidden);
+ }
 
   return (
     <div className="App">
       <div className="App-header">
-        <div>
-          All online users that introductions were sucessfully sent
-          <ul>
-            <li>Student 1</li>
-            <li>Student 2</li>
-            <li>Student 3</li>
-          </ul>
-        </div>
+        <button onClick={showOrHide}>Show/Hide</button>
+        {
+          !isHidden && 
+          <div>
+            All online users that introductions were sucessfully sent
+            <ul>
+              {userNames.map(user => <li key={user}> {user} </li>)}
+            </ul>
+          </div>
+        }
       </div>
     </div>
   );
