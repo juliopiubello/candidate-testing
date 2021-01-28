@@ -13,18 +13,19 @@ const App = () => {
       : { status: "online", id: userId };
   };
 
-  const sendIntroduction = async (userId) => {
+  const sendEmail = async (userId) => {
+    // return if it was sucessfull or not
     return Math.random() > 0.1 ? true : false;
   };
 
   /*
     Question 1: 
-    Find all online users and send them introductions. Render the users for which the introductions were successfully sent
+    Find all online users and send them emails. Render the users for which the emails were successfully sent
 
     Step 1: Load users
-    Step 2: Check users onlinne
-    Step 3: Send introduction for whom are oline
-    Step 4: Render those which the intro was sucessfully sentt
+    Step 2: Check users online
+    Step 3: Send email for whom are online
+    Step 4: Render those which the email was successfully sent
   
   */
 
