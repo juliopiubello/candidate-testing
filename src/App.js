@@ -28,6 +28,28 @@ const App = () => {
     Step 4: Render those which the email was successfully sent
   
   */
+ const [usersToRender, setUsersToRender] = useState([]);
+
+ useEffect(()=> {
+   const initIntroPage = async () => {
+    const users = await fetchUserIds();
+    const onlineUsers = [];
+    const usersIntroduced = [];
+
+    for (const user of users) {
+      const { status } = await checkStatus(user);
+        if(status === "online") onlineUsers.push(user);
+    }
+
+     for (const user of onlineUsers) {
+      const isIntroduced = await sendIntroduction(user);
+        if(isIntroduced) usersIntroduced.push(user);
+    }
+    
+     setUsersToRender(usersIntroduced);
+   }
+   initIntroPage().catch(err => console.error(err));
+ }, []);
 
   return (
     <div className="App">
@@ -35,9 +57,7 @@ const App = () => {
         <div>
           All online users that introductions were sucessfully sent
           <ul>
-            <li>Student 1</li>
-            <li>Student 2</li>
-            <li>Student 3</li>
+            {usersToRender.map(userId => (<li key={userId}>{userId}</li>))}
           </ul>
         </div>
       </div>
