@@ -52,6 +52,8 @@ const App = () => {
         return <li key={userStatus.id}>{userStatus.id}</li>
       }
     }
+
+    return null;
   });
 
   return (
