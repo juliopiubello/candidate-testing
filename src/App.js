@@ -2,12 +2,22 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const App = () => {
-  
+  const [userIds, setUserIds] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchUserIds();
+      setUserIds(data);
+   }
+
+   fetchData();
+  }, []);
+
   const fetchUserIds = async () => {
     return ["john.smith", "sara.lee", "jack.ma"];
   };
 
-  const checkStatus = async (userId) => {
+  const checkStatus = (userId) => {
     return Math.random() > 0.8
       ? { status: "offline", id: userId }
       : { status: "online", id: userId };
@@ -19,15 +29,30 @@ const App = () => {
   };
 
   /*
-    Question 1: 
+    Question 1:
     Find all online users and send them emails. Render the users for which the emails were successfully sent
 
     Step 1: Load users
     Step 2: Check users online
     Step 3: Send email for whom are online
     Step 4: Render those which the email was successfully sent
-  
+
   */
+
+  let content = userIds.map(userId => {
+    // check for the status of the user
+    const userStatus = checkStatus(userId);
+  
+    if (userStatus.status === "online") {
+      // send email if user is online
+      const emailSent = sendEmail(userStatus.id);
+
+      if (emailSent) {
+        // display user if email was successfully sent
+        return <li key={userStatus.id}>{userStatus.id}</li>
+      }
+    }
+  });
 
   return (
     <div className="App">
@@ -35,9 +60,7 @@ const App = () => {
         <div>
           All online users that introductions were sucessfully sent
           <ul>
-            <li>Student 1</li>
-            <li>Student 2</li>
-            <li>Student 3</li>
+            {content}
           </ul>
         </div>
       </div>
