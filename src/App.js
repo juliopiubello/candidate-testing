@@ -50,7 +50,6 @@ const App = () => {
     Step 2: Check users online
     Step 3: Send email for whom are online
     Step 4: Render those which the email was successfully sent
-  
   */
 
   return (
