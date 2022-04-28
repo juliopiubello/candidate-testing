@@ -18,11 +18,40 @@ const App = () => {
     return Math.random() > 0.1 ? true : false;
   };
 
+
+  const [countUser, setCountUser] = useState([]);
+
+  const question1 = async () => {
+    const users = await fetchUserIds();
+
+    // console.log(users);
+
+    const arrayValidEmails = [];
+
+    for (let index = 0; index < users.length; index++) {
+      const validUsers = await checkStatus(users[index]);
+      console.log(validUsers);
+
+      if (validUsers.status === 'online') {
+        const validEmail = await sendEmail(validUsers.id);
+          if (validEmail) {
+            arrayValidEmails.push(validUsers.id);
+          }
+      }
+    }
+    setCountUser(arrayValidEmails);
+  }
+  // console.log(countUser);
+
+  useEffect(() => {
+    question1();
+  }, []);
+
   /*
     Question 1: 
     Find all online users and send them emails. Render the users for which the emails were successfully sent
 
-    Step 1: Load users
+    Step 1: Load users V
     Step 2: Check users online
     Step 3: Send email for whom are online
     Step 4: Render those which the email was successfully sent
@@ -35,9 +64,7 @@ const App = () => {
         <div>
           All online users that introductions were sucessfully sent
           <ul>
-            <li>Student 1</li>
-            <li>Student 2</li>
-            <li>Student 3</li>
+            {countUser.map((user) => <li key={user}>{user}</li>)}
           </ul>
         </div>
       </div>
