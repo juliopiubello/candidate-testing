@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const App = () => {
+  const [usersToLoad, setUsersToLoad] = useState([]);
+
   
   const fetchUserIds = async () => {
     return ["john.smith", "sara.lee", "jack.ma"];
@@ -22,12 +24,42 @@ const App = () => {
     Question 1: 
     Find all online users and send them emails. Render the users for which the emails were successfully sent
 
-    Step 1: Load users
-    Step 2: Check users online
-    Step 3: Send email for whom are online
-    Step 4: Render those which the email was successfully sent
+    
+    
+    
+    
   
   */
+
+    useEffect(() => {
+      const usersWithEmailSent = [];
+
+      //  Step 1: Load users
+      const users = async () => {
+        await fetchUserIds()
+        .then(users => users.map( user => checkingStatus(user)))
+      }
+      users();
+
+      //  Step 2: Check users online
+      const checkingStatus = async (users) => {
+        await checkStatus(users).then(response => {
+          if(response.status === 'online') {
+            sendEmailToOnlineUsers(response.id)
+          }
+        });
+      }
+
+      // Step 3: Send email for whom are online
+      const sendEmailToOnlineUsers = async (users) => {
+        await sendEmail(users).then( email => {
+          if(email){
+            usersWithEmailSent.push(users)
+          }
+          setUsersToLoad([...usersWithEmailSent])
+        })
+      }
+    },[])
 
   return (
     <div className="App">
@@ -35,9 +67,10 @@ const App = () => {
         <div>
           All online users that introductions were sucessfully sent
           <ul>
-            <li>Student 1</li>
-            <li>Student 2</li>
-            <li>Student 3</li>
+            {/* Step 4: Render those which the email was successfully sent */}
+            {usersToLoad.map( users => (
+              <li key={users}>{users}</li>
+            ))}
           </ul>
         </div>
       </div>
