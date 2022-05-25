@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const App = () => {
-  
+    const [userOnline, setUser] = useState([]);
   const fetchUserIds = async () => {
     return ["john.smith", "sara.lee", "jack.ma"];
   };
@@ -17,7 +17,30 @@ const App = () => {
     // return if it was sucessfull or not
     return Math.random() > 0.1 ? true : false;
   };
+useEffect(() => {
+    (async () => {
+      try {
+        const listUser = await fetchUserIds();
+        let userOnline = [];
+        let emailSuccess = [];
+        for (let i = 0; i < listUser.length; i++) {
+          const checkOnline = await checkStatus(i);
+          if (checkOnline.status === "online") {
+            userOnline.push(listUser[i]);
+          }
+        }
+        for (let i = 0; i < userOnline.length; i++) {
+          const sendSuccess = await sendEmail(i);
+          if (sendSuccess) {
+            emailSuccess.push(userOnline[i]);
+          }
+        }
 
+        setUser(emailSuccess);
+
+      } catch (error) {}
+    })();
+  }, []);
   /*
     Question 1: 
     Find all online users and send them emails. Render the users for which the emails were successfully sent
@@ -34,10 +57,9 @@ const App = () => {
       <div className="App-header">
         <div>
           All online users that introductions were sucessfully sent
-          <ul>
-            <li>Student 1</li>
-            <li>Student 2</li>
-            <li>Student 3</li>
+           <ul>
+            {userOnline.length > 0 &&
+              userOnline.map((user, idx) => <li key={idx}>{user}</li>)}
           </ul>
         </div>
       </div>
