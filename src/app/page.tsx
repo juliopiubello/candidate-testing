@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import Image from "next/image";
 
-const App = () => {
-  
+export default function Home() {
   const fetchUserIds = async () => {
     return ["john.smith", "sara.lee", "jack.ma"];
   };
 
-  const checkStatus = async (userId) => {
+  const checkStatus = async (userId: any) => {
     return Math.random() > 0.8
       ? { status: "offline", id: userId }
       : { status: "online", id: userId };
   };
 
-  const sendEmail = async (userId) => {
+  const sendEmail = async (userId: any) => {
     // return if it was sucessfull or not
     return Math.random() > 0.1 ? true : false;
   };
@@ -44,5 +42,3 @@ const App = () => {
     </div>
   );
 }
-
-export default App;
